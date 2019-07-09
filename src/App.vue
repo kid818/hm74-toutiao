@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-  APP<el-button type="danger" icon="el-icon-delete" circle></el-button>
   </div>
 </template>
 
