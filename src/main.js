@@ -3,6 +3,8 @@ import App from './App.vue'
 
 Vue.config.productionTip = false
 
+// 职责1:导入项目需要依赖的资源(包 CSS)
+// 职责2:初始化根实例
 new Vue({
   render: h => h(App)
 }).$mount('#app')
