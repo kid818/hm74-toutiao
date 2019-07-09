@@ -6,14 +6,12 @@
         <el-input placeholder="请输入用户名" class="name"></el-input>
         <el-input placeholder="请输入密码" show-password class="paw"></el-input>
         <el-button class="ve">发送验证码</el-button>
-        <el-checkbox class="ck">
-          <span>
-            我已同意并阅读
-            <a href="#">用户协议</a>和
-            <a href="#">隐私条款</a>
-          </span>
-        </el-checkbox>
-
+        <el-checkbox class="ck"></el-checkbox>
+        <span>
+          我已同意并阅读
+          <a href="#">用户协议</a>和
+          <a href="#">隐私条款</a>
+        </span>
         <br />
         <el-button class="login" type="primary">登录</el-button>
       </form>
@@ -60,8 +58,12 @@ export default {}
     .ck {
       margin-right: 15px;
       margin-top: 20px;
-      a {
+    }
+    span{
+        font-size: 14px;
+        a {
         color: skyblue;
+        text-decoration: none;
       }
     }
     .login {
