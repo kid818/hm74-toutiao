@@ -1,6 +1,12 @@
 import Vue from 'vue'
 import App from './App.vue'
 
+// 引入element-ul
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+// 把element-ui注册到vue实例
+Vue.use(ElementUI)
+
 Vue.config.productionTip = false
 
 // 职责1:导入项目需要依赖的资源(包 CSS)
