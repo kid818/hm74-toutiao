@@ -3,24 +3,33 @@
     <el-card class="login-box">
       <img src="../../assets/images/logo_index.png" alt />
       <form>
-        <el-input placeholder="请输入用户名" class="name"></el-input>
-        <el-input placeholder="请输入密码" show-password class="paw"></el-input>
+        <el-input placeholder="请输入用户名" class="name" v-model="name"></el-input>
+        <el-input placeholder="请输入验证码" class="verify" v-model="verify"></el-input>
         <el-button class="ve">发送验证码</el-button>
-        <el-checkbox class="ck"></el-checkbox>
+        <el-checkbox class="ck" checked="checkde"></el-checkbox>
         <span>
           我已同意并阅读
           <a href="#">用户协议</a>和
           <a href="#">隐私条款</a>
         </span>
         <br />
-        <el-button class="login" type="primary">登录</el-button>
+        <router-link to="/">
+          <el-button class="login" type="primary">登录</el-button>
+        </router-link>
       </form>
     </el-card>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+      name: '',
+      verify: ''
+    }
+  }
+}
 </script>
 
 <style scoped lang='less'>
@@ -48,7 +57,7 @@ export default {}
     .name {
       margin-top: 10px;
     }
-    .paw {
+    .verify {
       margin-top: 10px;
       width: 63%;
     }
@@ -59,9 +68,9 @@ export default {}
       margin-right: 15px;
       margin-top: 20px;
     }
-    span{
-        font-size: 14px;
-        a {
+    span {
+      font-size: 14px;
+      a {
         color: skyblue;
         text-decoration: none;
       }
