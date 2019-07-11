@@ -20,7 +20,7 @@ export default {
 ul {
     width:20%;
     background-color: aqua;
-    height: 800px;
+    height: 380px;
     display:inline-block;
 }
 </style>
