@@ -1,5 +1,5 @@
 <template>
-    <div class="box"></div>
+    <img width="800" src="https://cn.bing.com/th?id=OIP.YhqkqgdJFIg0K6yQ11cxLgHaEo&pid=Api&rs=1&p=0" alt="">
 </template>
 
 <script>
@@ -9,9 +9,5 @@ export default {
 </script>
 
 <style scoped lang="less">
-.box{
-    width: 100%;
-    height: 100%;
-    background: url(../../assets/images/th.png) no-repeat center / 1000px,1000px
-}
+
 </style>

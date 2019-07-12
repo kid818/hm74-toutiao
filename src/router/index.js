@@ -20,6 +20,8 @@ import Comment from '../views/comment/comment.vue'
 import Fans from '../views/fans/fans.vue'
 // 个人设置
 import Setting from '../views//setting/setting.vue'
+// 404
+import NotFound from '../views/404/404.vue'
 // 注册use
 Vue.use(VueRouter)
 // 初始化路由对象（配置路由规则）
@@ -29,11 +31,10 @@ const router = new VueRouter({
     { name: 'login', path: '/login', component: Login },
     // 首页
     {
-      anme: 'home',
       path: '/',
       component: Home,
       children: [
-        { name: 'welcome', path: '/welcome', component: Welcome },
+        { name: 'welcome', path: '/', component: Welcome },
         // 给主页重定向
         { path: '/', redirect: { name: 'welcome' } },
         { path: '/article', component: Article },
@@ -43,8 +44,16 @@ const router = new VueRouter({
         { path: '/fans', component: Fans },
         { path: '/setting', component: Setting }
       ]
-    }
+    },
+    // ...很多规则
+    { name: '404', path: '*', component: NotFound }
   ]
 })
-// 导出
+// 加上前置守卫
+router.beforeEach((to, from, next) => {
+  if (to.path === '/login') return next()
+  const user = window.sessionStorage.getItem('hm74-toutiao')
+  if (user) return next()
+  next('/login')
+})
 export default router

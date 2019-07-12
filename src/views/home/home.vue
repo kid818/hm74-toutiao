@@ -3,56 +3,49 @@
     <el-aside class="my-aside" :width="collapse?'64px':'200px'">
       <div class="logo" :class="{close:collapse}"></div>
       <el-menu
+        router
         style="border-right:none"
-        default-active="1"
+        default-active="/"
         background-color="#002033"
         text-color="#fff"
         active-text-color="#ffd04b"
         :collapse="collapse"
         :collapse-transition="false"
       >
-        <router-link to="/welcome" tag="li">
-          <el-menu-item index="1">
-            <i class="el-icon-s-home"></i>
-            <span slot="title">首页</span>
-          </el-menu-item>
-        </router-link>
-        <router-link to="/article" tag="li">
-          <el-menu-item index="2">
-            <i class="el-icon-document"></i>
-            <span slot="title">内容管理</span>
-          </el-menu-item>
-        </router-link>
-        <router-link to="/image" tag="li">
-          <el-menu-item index="3">
-            <i class="el-icon-picture"></i>
-            <span slot="title">素材管理</span>
-          </el-menu-item>
-        </router-link>
-        <router-link to="/publish" tag="li">
-          <el-menu-item index="4">
-            <i class="el-icon-s-promotion"></i>
-            <span slot="title">发布文章</span>
-          </el-menu-item>
-        </router-link>
-        <router-link to="/comment" tag="li">
-          <el-menu-item index="5">
-            <i class="el-icon-chat-dot-round"></i>
-            <span slot="title">评论管理</span>
-          </el-menu-item>
-        </router-link>
-        <router-link to="/fans" tag="li">
-          <el-menu-item index="6">
-            <i class="el-icon-present"></i>
-            <span slot="title">粉丝管理</span>
-          </el-menu-item>
-        </router-link>
-        <router-link to="/setting" tag="li">
-          <el-menu-item index="7">
-            <i class="el-icon-setting"></i>
-            <span slot="title">个人设置</span>
-          </el-menu-item>
-        </router-link>
+        <el-menu-item index="/">
+          <i class="el-icon-s-home"></i>
+          <span slot="title">首页</span>
+        </el-menu-item>
+
+        <el-menu-item index="/article">
+          <i class="el-icon-document"></i>
+          <span slot="title">内容管理</span>
+        </el-menu-item>
+
+        <el-menu-item index="/image">
+          <i class="el-icon-picture"></i>
+          <span slot="title">素材管理</span>
+        </el-menu-item>
+
+        <el-menu-item index="/publish">
+          <i class="el-icon-s-promotion"></i>
+          <span slot="title">发布文章</span>
+        </el-menu-item>
+
+        <el-menu-item index="/comment">
+          <i class="el-icon-chat-dot-round"></i>
+          <span slot="title">评论管理</span>
+        </el-menu-item>
+
+        <el-menu-item index="/fans">
+          <i class="el-icon-present"></i>
+          <span slot="title">粉丝管理</span>
+        </el-menu-item>
+
+        <el-menu-item index="/setting">
+          <i class="el-icon-setting"></i>
+          <span slot="title">个人设置</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
     <el-container>
@@ -96,6 +89,15 @@ export default {
       this.collapse = !this.collapse
     }
   }
+  // 测试token验证的请求
+  // created: function () {
+  //   this.$http
+  //     .get('http://ttapi.research.itcast.cn/mp/v1_0/articles')
+  //     .then(res => {
+  //       console.log(res)
+  //     })
+  //     .catch(() => {})
+  // }
 }
 </script>
 

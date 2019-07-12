@@ -1,5 +1,5 @@
 <template>
-    <h1>内容管理</h1>
+    <img width="800" src="https://cn.bing.com/th?id=OIP.uqjKhrWYaffnCYht7D83sAHaEo&pid=Api&rs=1&p=0" alt="">
 </template>
 
 <script>

@@ -39,8 +39,8 @@ export default {
     return {
       // 表单数据对象
       loginForm: {
-        mobile: '',
-        code: ''
+        mobile: '13911111111',
+        code: '246810'
       },
       // 表单验证
       loginRules: {
@@ -71,6 +71,13 @@ export default {
               // console.log(res.data) 去做什么事情
               // 1.跳转到首页
               // 2.保存用户的信息 用来判断登录的状态
+              // sessionStorage BOM 对象 全局对象
+              // 是有 有效期的关闭浏览后失效
+              // sessionStorage.setitem(key,value)存储数据
+              // sessionStorage.getitem(key)获取数据
+              // sessionStorage.removeitem(key)删除数据
+              // sessionStorage.clear(key)清空数据
+              window.sessionStorage.setItem('hm74-toutiao', JSON.stringify(res.data.data))
               this.$router.push('/')
             })
             .catch(() => {
@@ -108,10 +115,14 @@ export default {
     }
     .wz {
       color: skyblue;
+      .el-checkbox{
+        margin-right: 10px;
+      }
       span {
         color: #666;
       }
     }
   }
 }
+
 </style>

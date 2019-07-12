@@ -1,5 +1,5 @@
 <template>
-    <h1>粉丝管理</h1>
+    <img width="800" src="http://www.desktx.com/d/file/wallpaper/comic/20161019/07d449dfaec89d6e8eb9c385f57e6260.png" alt="">
 </template>
 
 <script>
