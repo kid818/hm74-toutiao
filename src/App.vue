@@ -6,7 +6,6 @@
 </template>
 
 <script>
-// 导入主页
 
 export default {
   name: 'app',
@@ -16,8 +15,5 @@ export default {
 </script>
 
 <style lang="less">
-// * {
-//   margin: 0;
-//   padding: 0;
-// }
+
 </style>
