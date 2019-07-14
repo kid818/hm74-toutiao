@@ -5,7 +5,7 @@
       <el-menu
         router
         style="border-right:none"
-        default-active="/"
+        :default-active="$route.path"
         background-color="#002033"
         text-color="#fff"
         active-text-color="#ffd04b"
@@ -52,21 +52,21 @@
       <el-header class="my-header">
         <span class="el-icon-s-fold" @click="toggleMenu()"></span>
         <span class="text">江苏传智播客科技教育有限公司</span>
-        <el-dropdown style="float:right">
+        <el-dropdown style="float:right" @command="handleCommand">
           <span class="el-dropdown-link">
             <img
               style="vertical-align: middle"
               width="30"
               height="30"
-              src="../../assets/images/avatar.jpg"
+              :src="avatar"
               alt
             />
-            <b>黑马小哥</b>
+            <b>{{name}}</b>
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-setting">个人设置</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-unlock">退出登录</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-setting" command="setting">个人设置</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-unlock" command="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
@@ -81,12 +81,35 @@
 export default {
   data () {
     return {
-      collapse: false
+      collapse: false,
+      avatar: '',
+      name: ''
     }
+  },
+  created () {
+    const user = JSON.parse(window.sessionStorage.getItem('hm74-toutiao'))
+    this.avatar = user.photo
+    this.name = user.name
   },
   methods: {
     toggleMenu () {
       this.collapse = !this.collapse
+    },
+    // 1.使用的是click dom的原生时间
+    // 2.此时你绑定的一个原生事件给组件el-dropdown-item
+    // 3.组件解析过后 这个标签是不存在的事件绑定无效
+    // 4.时间修饰符：@click.prevent组织浏览器默认行为  绑定原生元素
+    setting () {
+      this.$router.push('/setting')
+    },
+    logout () {
+      // 清楚sessionStorage中的hm
+      window.sessionStorage.removeItem('hm74-toutiao')
+      this.$router.push('/login')
+    },
+    handleCommand (command) {
+      // command就是点击的选项中的command的值
+      this[command]()
     }
   }
   // 测试token验证的请求

@@ -1,5 +1,5 @@
 <template>
-   <img width="800" src="http://pic34.nipic.com/20131105/12314404_095400518153_2.jpg" alt="">
+   <img width="800" src="https://cn.bing.com/th?id=OIP.uqjKhrWYaffnCYht7D83sAHaEo&pid=Api&rs=1&p=0" alt="">
 </template>
 
 <script>
