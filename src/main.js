@@ -10,8 +10,12 @@ import 'element-ui/lib/theme-chalk/index.css'
 // 2.在使用vue-cli的时候@符号子啊路径中作为前缀使用的时候默认代表src目录
 import router from '@/router'
 
+// 导入面包屑插槽插件
+import components from '@/components/index.js'
+
 // 导入axios
 import axios from '@/api/axios'
+Vue.use(components)
 Vue.prototype.$http = axios
 // 把element-ui注册到vue实例
 Vue.use(ElementUI)
