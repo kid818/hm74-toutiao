@@ -58,32 +58,48 @@ export default {
   methods: {
     login () {
       // 对整个表单进行校验
-      this.$refs.loginForm.validate(valid => {
+      // this.$refs.loginForm.validate(valid => {
+      //   if (valid) {
+      //     // 提交表单请求 axios是基于primise封装的post()返回值是一个promise对象
+      //     this.$http
+      //       .post(
+      //         'http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
+      //         this.loginForm
+      //       )
+      //       .then(res => {
+      //         // res 是表示响应对象 包含后台返回的数据 res.data
+      //         // console.log(res.data) 去做什么事情
+      //         // 1.跳转到首页
+      //         // 2.保存用户的信息 用来判断登录的状态
+      //         // sessionStorage BOM 对象 全局对象
+      //         // 是有 有效期的关闭浏览后失效
+      //         // sessionStorage.setitem(key,value)存储数据
+      //         // sessionStorage.getitem(key)获取数据
+      //         // sessionStorage.removeitem(key)删除数据
+      //         // sessionStorage.clear(key)清空数据
+      //         window.sessionStorage.setItem('hm74-toutiao', JSON.stringify(res.data.data))
+      //         this.$router.push('/')
+      //       })
+      //       .catch(() => {
+      //         // 提示错误
+      //         this.$message.error('手机号或验证码不错误')
+      //       })
+      //   }
+      // })
+
+      this.$refs.loginForm.validate(async valid => {
         if (valid) {
-          // 提交表单请求 axios是基于primise封装的post()返回值是一个promise对象
-          this.$http
-            .post(
-              'http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
-              this.loginForm
+          // 请求 prmise对象 给你发请求
+          try {
+            const res = await this.$http.post('http://ttapi.research.itcast.cn/mp/v1_0/authorizations', this.loginForm)
+            window.sessionStorage.setItem(
+              'hm74-toutiao',
+              JSON.stringify(res.data.data)
             )
-            .then(res => {
-              // res 是表示响应对象 包含后台返回的数据 res.data
-              // console.log(res.data) 去做什么事情
-              // 1.跳转到首页
-              // 2.保存用户的信息 用来判断登录的状态
-              // sessionStorage BOM 对象 全局对象
-              // 是有 有效期的关闭浏览后失效
-              // sessionStorage.setitem(key,value)存储数据
-              // sessionStorage.getitem(key)获取数据
-              // sessionStorage.removeitem(key)删除数据
-              // sessionStorage.clear(key)清空数据
-              window.sessionStorage.setItem('hm74-toutiao', JSON.stringify(res.data.data))
-              this.$router.push('/')
-            })
-            .catch(() => {
-              // 提示错误
-              this.$message.error('手机号或验证码不错误')
-            })
+            this.$router.push('/')
+          } catch (err) {
+            this.$message.error('手机号或者验证码错误')
+          }
         }
       })
     }
@@ -115,7 +131,7 @@ export default {
     }
     .wz {
       color: skyblue;
-      .el-checkbox{
+      .el-checkbox {
         margin-right: 10px;
       }
       span {
@@ -124,5 +140,4 @@ export default {
     }
   }
 }
-
 </style>
