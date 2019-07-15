@@ -17,7 +17,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="频道: ">
-          <el-select c-model="reqParams.channerl_id">
+          <el-select v-model="reqParams.channerl_id">
             <el-option
               v-for="item in channelOptions"
               :key="item.id"
