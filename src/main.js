@@ -11,7 +11,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import router from '@/router'
 
 // 导入面包屑插槽插件
-import components from '@/components/index.js'
+import components from '@/components'
 
 // 导入axios
 import axios from '@/api/axios'

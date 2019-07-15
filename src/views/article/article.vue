@@ -17,7 +17,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="频道: ">
-          <el-select c-model="reqParams.channerl_id">
+          <el-select v-model="reqParams.channerl_id">
             <el-option
               v-for="item in channelOptions"
               :key="item.id"
@@ -28,6 +28,8 @@
         </el-form-item>
         <el-form-item label="日期: ">
           <el-date-picker
+            value-format="yyyy-MM-dd"
+            @change="changeDate"
             v-model="dateValues"
             type="daterange"
             range-separator="至"
@@ -36,12 +38,48 @@
           ></el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">筛选</el-button>
+          <el-button type="primary" @click="search()">筛选</el-button>
         </el-form-item>
       </el-form>
     </el-card>
     <!-- 结果区域 -->
-    <el-card></el-card>
+    <el-card>
+      <div slot="header">
+        根据筛选条件共查询到
+        <b>{{total}}</b>条结果:
+      </div>
+      <el-table :data="articles">
+        <el-table-column label="封面">
+          <template slot-scope="scope">
+            <el-image :src="scope.row.cover.images[0]" style="width:100px;height:75px">
+              <div slot="error">
+                <img src="../../assets/images/error.gif" width="100" height="75" alt />
+              </div>
+            </el-image>
+          </template>
+        </el-table-column>
+        <el-table-column label="标题" prop="title"></el-table-column>
+        <el-table-column label="状态">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.status === 0" type="info">草稿</el-tag>
+            <el-tag v-if="scope.row.status === 1">待审核</el-tag>
+            <el-tag v-if="scope.row.status === 2" type="success">审核通过</el-tag>
+            <el-tag v-if="scope.row.status === 3" type="warning">审核失败</el-tag>
+            <el-tag v-if="scope.row.status === 4" type="danger">已删除</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="发布时间" prop="pubdate"></el-table-column>
+        <el-table-column label="操作" width="120">
+          <template slot-scope>
+            <el-button type="primary" plain icon="el-icon-edit" circle></el-button>
+            <el-button type="danger" plain icon="el-icon-delete" circle></el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="box">
+        <el-pagination background layout="prev, pager, next" @current-change="pager" :current-page="reqParams.page" :page-size="reqParams.per_page" :total="total"></el-pagination>
+      </div>
+    </el-card>
   </div>
 </template>
 
@@ -53,6 +91,8 @@ export default {
     return {
       // 提交给后台的筛选条件
       reqParams: {
+        page: 1,
+        per_page: 10,
         // 默认数据 ''与 null 区别
         // 如果是 null 该字段是不会提交给后天的。
         status: null,
@@ -63,7 +103,51 @@ export default {
       // 频道的选项数组
       channelOptions: [{ name: 'java', id: 1 }],
       // 日期数据
-      dateValues: []
+      dateValues: [],
+      // 文章列表数据
+      articles: [],
+      // 总条数
+      total: 0
+    }
+  },
+  created () {
+    // 获取频道数据
+    this.getChannelOptions()
+    // 获取文章列表数据
+    this.getArticles()
+  },
+  methods: {
+    // 分页逻辑
+    pager (newPage) {
+      // 提交当前页码给后台 才能获取对应的数据
+      this.reqParams.page = newPage
+      this.getArticles()
+    },
+    // 搜索
+    search () {
+      this.getArticles()
+    },
+    // 选择时间处理函数
+    changeDate (values) {
+      this.reqParams.begin_pubdate = values[0]
+      this.reqParams.end_pubdate = values[1]
+    },
+    // 获取频道数据
+    async getChannelOptions () {
+      // res ===> {data:响应内容}  ===> {data:{channels:[{id,name}]}}
+      const {
+        data: { data }
+      } = await this.$http.get('channels')
+      this.channelOptions = data.channels
+    },
+    // 获取文件列表数据
+    async getArticles () {
+      const {
+        data: { data }
+      } = await this.$http.get('articles', { params: this.reqParams })
+      this.articles = data.results
+      // 获取总条数
+      this.total = data.total_count
     }
   }
 }
@@ -73,5 +157,9 @@ export default {
 // element-ui提供的组件  解析完毕后在当前
 .el-card {
   margin-bottom: 20px;
+}
+.box {
+  text-align: center;
+  margin-top: 20px;
 }
 </style>
