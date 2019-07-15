@@ -91,7 +91,7 @@ export default {
         if (valid) {
           // 请求 prmise对象 给你发请求
           try {
-            const res = await this.$http.post('http://ttapi.research.itcast.cn/mp/v1_0/authorizations', this.loginForm)
+            const res = await this.$http.post('authorizations', this.loginForm)
             window.sessionStorage.setItem(
               'hm74-toutiao',
               JSON.stringify(res.data.data)
