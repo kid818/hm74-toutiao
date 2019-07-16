@@ -17,14 +17,8 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="频道: ">
-          <el-select v-model="reqParams.channerl_id">
-            <el-option
-              v-for="item in channelOptions"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+          <!-- :value="reqParams.channel_id"  @input="把改变的数据设置给reqParams.channel_id-->
+          <my-channel v-model="reqParams.channel_id"></my-channel>
         </el-form-item>
         <el-form-item label="日期: ">
           <el-date-picker
@@ -61,6 +55,7 @@
         <el-table-column label="标题" prop="title"></el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
+            <!-- {{scope.row.id}} -->
             <el-tag v-if="scope.row.status === 0" type="info">草稿</el-tag>
             <el-tag v-if="scope.row.status === 1">待审核</el-tag>
             <el-tag v-if="scope.row.status === 2" type="success">审核通过</el-tag>
@@ -70,20 +65,28 @@
         </el-table-column>
         <el-table-column label="发布时间" prop="pubdate"></el-table-column>
         <el-table-column label="操作" width="120">
-          <template slot-scope>
-            <el-button type="primary" plain icon="el-icon-edit" circle></el-button>
-            <el-button type="danger" plain icon="el-icon-delete" circle></el-button>
+          <template slot-scope="scope">
+            <el-button @click="edit(scope.row.id)" type="primary" plain icon="el-icon-edit" circle></el-button>
+            <el-button @click="del(scope.row.id)" type="danger" plain icon="el-icon-delete" circle></el-button>
           </template>
         </el-table-column>
       </el-table>
       <div class="box">
-        <el-pagination background layout="prev, pager, next" @current-change="pager" :current-page="reqParams.page" :page-size="reqParams.per_page" :total="total"></el-pagination>
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          @current-change="pager"
+          :current-page="reqParams.page"
+          :page-size="reqParams.per_page"
+          :total="total"
+        ></el-pagination>
       </div>
     </el-card>
   </div>
 </template>
 
 <script>
+// import { async } from 'q'
 // import MyBread from '@/components/my-bread.vue'
 export default {
   // components: { MyBread },
@@ -100,8 +103,6 @@ export default {
         begin_pubdate: null,
         end_pubdate: null
       },
-      // 频道的选项数组
-      channelOptions: [{ name: 'java', id: 1 }],
       // 日期数据
       dateValues: [],
       // 文章列表数据
@@ -111,12 +112,31 @@ export default {
     }
   },
   created () {
-    // 获取频道数据
-    this.getChannelOptions()
     // 获取文章列表数据
     this.getArticles()
   },
   methods: {
+    // 编辑
+    edit (id) {
+      this.$router.push(`/publish?id=${id}`)
+    },
+    // 删除
+    del (id) {
+      this.$confirm('亲,此操作将永久删除该文章, 是否继续?', '温馨提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          await this.$http.delete(`articles/${id}`)
+          // 删除成功
+          this.$message.success('删除成功')
+          this.getArticles()
+        })
+        .catch(() => {
+
+        })
+    },
     // 分页逻辑
     pager (newPage) {
       // 提交当前页码给后台 才能获取对应的数据
@@ -132,14 +152,7 @@ export default {
       this.reqParams.begin_pubdate = values[0]
       this.reqParams.end_pubdate = values[1]
     },
-    // 获取频道数据
-    async getChannelOptions () {
-      // res ===> {data:响应内容}  ===> {data:{channels:[{id,name}]}}
-      const {
-        data: { data }
-      } = await this.$http.get('channels')
-      this.channelOptions = data.channels
-    },
+
     // 获取文件列表数据
     async getArticles () {
       const {

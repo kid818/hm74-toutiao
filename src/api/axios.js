@@ -7,7 +7,11 @@ const instance = axios.create({
   baseURL: 'http://ttapi.research.itcast.cn/mp/v1_0/',
   transformResponse: [(data) => {
     // 对data进行仍以转换处理
-    return JSONBig.parse(data)
+    // data 应该是 null  使用JSONBig转换null时会出现异常
+    if (data) {
+      return JSONBig.parse(data)
+    }
+    return data
   }]
   //   headers: {
   // Authorization: 'Bearer' + JSON.parse(window.sessionStorage.getItem('hm74-toutiao')).token
@@ -30,7 +34,7 @@ instance.interceptors.request.use(config => {
 // 响应拦截
 instance.interceptors.response.use(response => response, error => {
   // 做一些事情
-  if (error.response.status === 401) {
+  if (error.response && error.response.status === 401) {
     // hash 哈希 是url后面 #开始的字符串
     location.hash = '#/login'
   }
