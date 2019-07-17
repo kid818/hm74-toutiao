@@ -17,7 +17,7 @@ import components from '@/components'
 import axios from '@/api/axios'
 
 // 导入全局样式
-import '@/styles/index.css'
+import '@/styles/index.less'
 Vue.use(components)
 Vue.prototype.$http = axios
 // 把element-ui注册到vue实例
