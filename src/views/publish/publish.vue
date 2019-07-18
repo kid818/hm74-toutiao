@@ -8,8 +8,8 @@
         <el-form-item label="标题: ">
           <el-input v-model="articleForm.title" style="width:400px"></el-input>
         </el-form-item>
-        <el-form-item label="内容: ">
-          <quill-editor v-model="articleForm.content"></quill-editor>
+        <el-form-item label="内容: " style="height:300px">
+          <quill-editor v-model="articleForm.content" :options="editorOption"></quill-editor>
         </el-form-item>
         <el-form-item label="封面: ">
           <el-radio-group v-model="articleForm.cover.type">
@@ -18,9 +18,16 @@
             <el-radio :label="0">无图</el-radio>
             <el-radio :label="-1">自动</el-radio>
           </el-radio-group>
-          <div class="img-btn">
-            <img src="../../assets/images/default.png" alt />
-          </div>
+          <el-upload
+            action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
+            :headers="headers"
+            list-type="picture-card"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove"
+            name='image'
+          >
+            <i class="el-icon-plus"></i>
+          </el-upload>
         </el-form-item>
         <el-form-item label="频道: ">
           <my-channel v-model="articleForm.channel_id"></my-channel>
@@ -52,7 +59,35 @@ export default {
           imges: ''
         },
         channel_id: null
+      },
+      // 配置富文本选项
+      editorOption: {
+        modules: {
+          toolbar: [
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'code-block'],
+            [{ header: 1 }, { header: 2 }],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            [{ indent: '-1' }, { indent: '+1' }]
+          ]
+        }
+      },
+      dialogImageUrl: '',
+      dialogVisible: false,
+      headers: {
+        Authorization:
+          'Bearer ' +
+          JSON.parse(window.sessionStorage.getItem('hm74-toutiao')).token
       }
+    }
+  },
+  methods: {
+    handleRemove (file, fileList) {
+      console.log(file, fileList)
+    },
+    handlePictureCardPreview (file) {
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
     }
   }
 }
@@ -68,5 +103,8 @@ export default {
     height: 100%;
     display: block;
   }
+}
+.quill-editor {
+  height: 240px;
 }
 </style>
