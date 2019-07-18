@@ -18,7 +18,6 @@
             <el-radio :label="0">无图</el-radio>
             <el-radio :label="-1">自动</el-radio>
           </el-radio-group>
-          <!-- 测试 -->
           <el-upload
             action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
             :headers="headers"
