@@ -1,8 +1,8 @@
 <template>
-  <div class="container">
+  <div class="article-container">
     <el-card>
       <div slot="header">
-        <my-bread>发布文章</my-bread>
+        <my-bread>{{articleId?'修改':'发布'}}文章</my-bread>
       </div>
       <el-form :v-model="articleForm" label-width="100px">
         <el-form-item label="标题: ">
@@ -12,29 +12,33 @@
           <quill-editor v-model="articleForm.content" :options="editorOption"></quill-editor>
         </el-form-item>
         <el-form-item label="封面: ">
-          <el-radio-group v-model="articleForm.cover.type">
+          <el-radio-group v-model="articleForm.cover.type" @change="changeType">
             <el-radio :label="1">单图</el-radio>
             <el-radio :label="3">三图</el-radio>
             <el-radio :label="0">无图</el-radio>
             <el-radio :label="-1">自动</el-radio>
           </el-radio-group>
-          <el-upload
-            action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
-            :headers="headers"
-            list-type="picture-card"
-            :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove"
-            name='image'
-          >
-            <i class="el-icon-plus"></i>
-          </el-upload>
+          <!-- 单图 -->
+          <div v-if="articleForm.cover.type === 1">
+            <my-image v-model="articleForm.cover.images[0]"></my-image>
+          </div>
+          <!-- 三图图 -->
+          <div v-if="articleForm.cover.type === 3">
+            <my-image v-model="articleForm.cover.images[0]"></my-image>
+            <my-image v-model="articleForm.cover.images[1]"></my-image>
+            <my-image v-model="articleForm.cover.images[2]"></my-image>
+          </div>
         </el-form-item>
         <el-form-item label="频道: ">
           <my-channel v-model="articleForm.channel_id"></my-channel>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary">发表</el-button>
-          <el-button>存入草稿</el-button>
+        <el-form-item v-if="!articleId">
+          <el-button type="primary" @click="publish(false)">发表</el-button>
+          <el-button @click="publish(true)">存入草稿</el-button>
+        </el-form-item>
+        <el-form-item v-else>
+          <el-button type="primary" @click="edit(false)">修改</el-button>
+          <el-button @click="edit(true)">存入草稿</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -51,17 +55,20 @@ export default {
   components: { quillEditor },
   data () {
     return {
+      // 提交给后台的文章数据
       articleForm: {
         title: '',
         content: '',
         cover: {
           type: 1,
-          imges: ''
+          // 数组=长度 如果是单图为1 如果是三图长度为3
+          images: []
         },
         channel_id: null
       },
       // 配置富文本选项
       editorOption: {
+        placeholder: '',
         modules: {
           toolbar: [
             ['bold', 'italic', 'underline', 'strike'],
@@ -72,39 +79,62 @@ export default {
           ]
         }
       },
-      dialogImageUrl: '',
-      dialogVisible: false,
-      headers: {
-        Authorization:
-          'Bearer ' +
-          JSON.parse(window.sessionStorage.getItem('hm74-toutiao')).token
+      articleId: null
+    }
+  },
+  created () {
+    this.articleId = this.$route.query.id
+    // 可能拿不到 当你是发布时
+    // 获取文章数据3xvccccccccccew
+    if (this.articleId) {
+      this.getAtticle()
+    }
+  },
+  watch: {
+    $route () {
+      // 监听一种 有修改切换到发布
+      this.articleId = null
+      this.articleForm = {
+        title: '',
+        content: '',
+        cover: {
+          type: 1,
+          // 数组=长度 如果是单图为1 如果是三图长度为3
+          images: []
+        },
+        channel_id: null
       }
     }
   },
   methods: {
-    handleRemove (file, fileList) {
-      console.log(file, fileList)
+    // 获取文翰数据
+    async getAtticle () {
+      const { data: { data } } = await this.$http.get('articles/' + this.articleId)
+      this.articleForm = data
     },
-    handlePictureCardPreview (file) {
-      this.dialogImageUrl = file.url
-      this.dialogVisible = true
+    // 发表和存入操作
+    async publish (draft) {
+      // 校验数据  省略。。。。
+      console.log(draft)
+      await this.$http.post(`articles?draft=${draft}`, this.articleForm)
+      this.$message.success(!draft ? '发表成功' : '存入草稿成功')
+      this.$router.push('/article')
+    },
+    // 修改
+    async edit (draft) {
+      // 校验数据  省略。。。。
+      console.log(draft)
+      await this.$http.put(`articles/${this.articleId}draft=${draft}`, this.articleForm)
+      this.$message.success(!draft ? '修改成功' : '修改草稿成功')
+      this.$router.push('/article')
+    },
+    changeType () {
+      // 重新选中图片类型 清空图片数据
+      this.articleForm.cover.images = []
     }
   }
 }
 </script>
 
 <style scoped lang='less'>
-.img-btn {
-  width: 150px;
-  height: 150px;
-  border: 1px dashed #ddd;
-  img {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-}
-.quill-editor {
-  height: 240px;
-}
 </style>
