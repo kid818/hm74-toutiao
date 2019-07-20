@@ -24,9 +24,10 @@
       style="margin-top:20px"
       background
       layout="prev, pager, next"
-      :total="total"
       :page-size="reqParams.per_page"
       :current-page="reqParams.page"
+      @current-change="pager"
+      :total="total"
       >
       </el-pagination>
     </el-card>
@@ -42,7 +43,7 @@ export default {
       // 参数
       reqParams: {
         page: 1,
-        per_page: 10,
+        per_page: 20,
         response_type: 'comment'
       },
       // 总条数
@@ -81,6 +82,8 @@ export default {
         data: { data }
       } = await this.$http.get('articles', { params: this.reqParams })
       this.comments = data.results
+      // 总条数
+      this.total = data.total_count
     }
   }
 }
