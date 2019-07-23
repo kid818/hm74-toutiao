@@ -108,7 +108,7 @@ export default {
       } = await this.$http.get('followers', { params: this.reqParams })
       this.fans = data.results
       this.total = data.total_count
-      //   console.log(data)
+      console.log(data)
     }
   }
 }
